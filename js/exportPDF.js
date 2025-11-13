@@ -248,134 +248,40 @@ function removeCommas(value) {
 // --- THIS IS THE ONLY FUNCTION THAT GENERATES A PDF ---
 // It sends the HTML to the server to be rendered by Puppeteer.
 function generateAndExport() {
-  console.log("Generating HTML for server...");
-  
+  console.log("Generating PDF on client-side...");
+
   // 1. Generate the HTML table data
   generateSummaryHTML(); 
-  const bodyContent = document.getElementById("pdf-content").innerHTML;
+  const content = document.getElementById("pdf-content");
 
-  // 2. Create the full HTML string for the server
-  // This is CRITICAL: We include the <style> tag so Puppeteer
-  // knows how to load the font.
+  // (อย่าลืมใส่ header/วันที่ เข้าไปใน #pdf-content ด้วย)
 
-  // ✅ สร้างวันที่ในรูปแบบภาษาไทย
-  const exportDate = new Date().toLocaleDateString('th-TH', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      timeZone: 'Asia/Bangkok'
-  });
+  const { jsPDF } = window.jspdf;
 
-  const fullHTML = `
-      <!DOCTYPE html>
-      <html lang="th">
-      <head>
-          <meta charset="UTF-8">
-          <style>
-              /* === 1. CSS RESET === */
-              * {
-                  margin: 0;
-                  padding: 0;
-                  box-sizing: border-box;
-              }
+  html2canvas(content).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
 
-              /* === 2. FONT EMBEDDING (Absolute URL) === */
-              @font-face {
-                  font-family: 'FCSound-Regular';
-                  /* This full URL is what Puppeteer will load */
-                  src: url('http://localhost:5500/assets/font/FCSound-Regular.ttf') format('truetype');
-              }
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
 
-              /* === 3. APPLY FONT & BASIC STYLES === */
-              body {
-                  font-family: 'FCSound-Regular', sans-serif;
-                  font-size: 16px;
-                  line-height: 1.4;
-              }
-              h3 {
-                  margin-bottom: 15px;
-                  font-size: 18px;
-              }
-              .pdf-header {
-                  font-size: 24px;
-                  font-weight: bold;
-                  text-align: center;
-                  padding: 10px;
-                  margin-bottom: 20px;
-                  border-bottom: 2px solid #333;
-                  page-break-after: avoid; /* Don't break page after header */
-              }
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
 
-              /* === 4. LAYOUT STYLES (from cp.css) === */
-              .pdf-table {
-                  table-layout: fixed;
-                  border-collapse: collapse;
-                  width: 100%;
-                  margin-bottom: 30px;
-              }
-              .pdf-table th,
-              .pdf-table td {
-                  border: 1px solid #ccc;
-                  padding: 6px;
-                  text-align: center;
-                  font-size: 12px;
-                  word-wrap: break-word;
-                  overflow-wrap: break-word;
-              }
-              .pdf-table th:first-child,
-              .pdf-table td:first-child {
-                  text-align: left;
-                  width: 35% !important;
-              }
-              .col-left {
-                  width: 35% !important;
-                  text-align: left;
-              }
-              .col-home {
-                  width: 21.5% !important;
-                  text-align: center;
-              }
-              .pdf-section {
-                  padding: 15px;
-                  page-break-after: always;
-              }
-              .score-note {
-                  font-size: 12px;
-                  color: #666;
-                  padding: 10px;
-                  text-align: left;
-              }
-          </style>
-      </head>
-      <body>
-          <div class="pdf-header">
-              เปรียบเทียบสเปกบ้าน
-              <div style="font-size: 16px; font-weight: normal; margin-top: 5px;">
-                  ${exportDate}
-              </div>
-          </div>
-          ${bodyContent}
-      </body>
-      </html>
-  `;
+      // คำนวณอัตราส่วนเพื่อให้ภาพพอดีกับหน้ากระดาษ
+      const ratio = canvasHeight / canvasWidth;
+      const imgHeight = pdfWidth * ratio;
 
-  // 3. Send the HTML to the server API
-  console.log("Sending HTML to server...");
-  fetch("http://localhost:5500/api/export-pdf", {
-      method: "POST",
-      headers: { "Content-Type": "text/html" },
-      body: fullHTML,
+      // (คุณอาจต้องเขียนโค้ดเพิ่มเพื่อตัดแบ่งเนื้อหาที่ยาวเกิน 1 หน้า)
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeight);
+
+      // 4. เปิด PDF (วิธีนี้คือการบังคับดาวน์โหลด)
+      pdf.save('summary.pdf');
+
+      // หรือถ้าอยากเปิดในแท็บใหม่ (อาจโดน popup blocker)
+      // window.open(pdf.output('bloburl'), '_blank');
   })
-  .then((res) => {
-      if (!res.ok) throw new Error("PDF export failed (check server logs)");
-      return res.blob();
-  })
-  .then((blob) => {
-      // 4. Open the PDF in a new tab
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
-  })
-  .catch((err) => {
+  .catch(err => {
       alert("❌ Export PDF ผิดพลาด: " + err.message);
       console.error(err);
   });

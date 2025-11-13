@@ -1,68 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-R">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-R" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>เปรียบเทียบสเปกบ้าน</title>
-    
-    <link rel="stylesheet" href="/CSS/cp.css">
-    <link rel="stylesheet" href="/CSS/news.css">
+
+    <link rel="stylesheet" href="/CSS/cp.css" />
+    <link rel="stylesheet" href="/CSS/news.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="exportPDF.js"></script>
+
     <style>
-        @font-face {
-            font-family: 'THSarabunNew';
-            src: url('/assets/font/THSarabunNew.ttf') format('truetype');
-        }
+      @font-face {
+        font-family: "THSarabunNew";
+        src: url("/assets/font/THSarabunNew.ttf") format("truetype");
+      }
 
-        #pdf-content {
-            font-family: 'THSarabunNew', sans-serif;
-        }
+      #pdf-content {
+        font-family: "THSarabunNew", sans-serif;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <header data-title="ผลการเปรียบเทียบ"></header>
     <main>
-        <a href="/" class="back-btn">&larr; กลับหน้าหลัก</a>
-        <div class="compare-result">
-            <table class="house-card-all" id="house-table">
-                <tr id="row-name">
-                    <th>ชื่อโครงการ</th>
-                </tr>
-                <tr id="row-image">
-                    <th>รูปภาพ</th>
-                </tr>
-                <tr id="row-star">
-                    <th>คะแนน</th>
-                </tr>
-            </table>
+      <a href="/" class="back-btn">&larr; กลับหน้าหลัก</a>
+      <div class="compare-result">
+        <table class="house-card-all" id="house-table">
+          <tr id="row-name">
+            <th>ชื่อโครงการ</th>
+          </tr>
+          <tr id="row-image">
+            <th>รูปภาพ</th>
+          </tr>
+          <tr id="row-star">
+            <th>คะแนน</th>
+          </tr>
+        </table>
 
-            <div id="dropdown-container"></div>
-        </div>
+        <div id="dropdown-container"></div>
+      </div>
     </main>
 
     <div class="print">
-        <button onclick="generateAndExport()">📥 ดู PDF ออนไลน์</button>
-        <button onclick="window.print()">🖨️ พิมพ์ / Save as PDF</button>
+      <button onclick="generateAndExport()">📥 ดู PDF ออนไลน์</button>
+      <button onclick="window.print()">🖨️ พิมพ์ / Save as PDF</button>
     </div>
 
-    <div id="pdf-content">
-        </div>
+    <div id="pdf-content"></div>
 
     <footer></footer>
-
-</body>
-<script src="/component/loadFooter.js"></script>
-<script src="/component/loadHeader.js"></script>
-<script src="/js/ratingConfig.js"></script>
-<script src="/js/rating.js"></script>
-<script src="/js/formGroups.js"></script>
-<script src="/js/compare.js"></script>
-<script src="/js/exportPDF.js"></script>
-<script>
+  </body>
+  <script src="/component/loadFooter.js"></script>
+  <script src="/component/loadHeader.js"></script>
+  <script src="/js/ratingConfig.js"></script>
+  <script src="/js/rating.js"></script>
+  <script src="/js/formGroups.js"></script>
+  <script src="/js/compare.js"></script>
+  <script src="/js/exportPDF.js"></script>
+  <script>
     window.addEventListener("load", () => {
-        generateSummaryHTML(); // ✅ Creates the HTML on load
+      generateSummaryHTML(); // ✅ Creates the HTML on load
     });
-</script>
-
+  </script>
 </html>
