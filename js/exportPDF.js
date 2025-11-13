@@ -257,6 +257,15 @@ function generateAndExport() {
   // 2. Create the full HTML string for the server
   // This is CRITICAL: We include the <style> tag so Puppeteer
   // knows how to load the font.
+
+  // ✅ สร้างวันที่ในรูปแบบภาษาไทย
+  const exportDate = new Date().toLocaleDateString('th-TH', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      timeZone: 'Asia/Bangkok'
+  });
+
   const fullHTML = `
       <!DOCTYPE html>
       <html lang="th">
@@ -339,6 +348,12 @@ function generateAndExport() {
           </style>
       </head>
       <body>
+          <div class="pdf-header">
+              เปรียบเทียบสเปกบ้าน
+              <div style="font-size: 16px; font-weight: normal; margin-top: 5px;">
+                  ${exportDate}
+              </div>
+          </div>
           ${bodyContent}
       </body>
       </html>
