@@ -48,6 +48,16 @@ window.itemTypeMap = {
     gutters: "C",
     pantry: "C",
     upvc: "C",
+    //new fac
+    fitness: "C",
+    swimming_pool: "C",
+    playground: "C",
+    club: "C",
+    common_garden: "C",
+    meeting_room: "C",
+    co_working_space: "C",
+    clubhouse: "C",
+    kids_room: "C",
     //--------------- D ---------------//
     Solar_Rooftop: "D",
     ev_charger: "D",
@@ -63,20 +73,7 @@ window.itemTypeMap = {
     //---------News--------------------//
     //--------------- A (โครงสร้าง) ---------------//
 // park: "A",
-// bike_lane: "A",
-// swimming_pool: "A",
-// playground: "A",
 
-// //--------------- B (ความปลอดภัย) ---------------//
-
-// //--------------- C (ความสะดวกสบาย) ---------------//
-// fitness: "C",
-// sauna_stream: "C",
-// co_working_space: "C",
-// meeting_room: "C",
-
-// //--------------- D (เทคโนโลยี) ---------------//
-// ev_charger: "D",
 
 };
 
