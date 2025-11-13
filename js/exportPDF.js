@@ -138,7 +138,7 @@ function generateSummaryHTML() {
         td.className = colHomeClass;
 
         if (type === "Checkbox") {
-          td.textContent = detail?.trim() || (value ? "⭕" : "❌");
+          td.textContent = detail?.trim() || (value ? "✅" : "❌");
         } else {
           if (value === "ไม่มี") {
             td.textContent = "❌";
